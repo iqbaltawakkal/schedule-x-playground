@@ -1,0 +1,32 @@
+{
+  "name": "vue-example",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@schedule-x/calendar-controls": "^2.0.0",
+    "@schedule-x/drag-and-drop": "^2.0.0",
+    "@schedule-x/event-modal": "^2.0.0",
+    "@schedule-x/event-recurrence": "^2.0.0",
+    "@schedule-x/scroll-controller": "^2.0.0",
+    "@schedule-x/theme-default": "^2.0.0",
+    "@schedule-x/vue": "2.0.0",
+    "pinia": "^2.1.7",
+    "vue": "^3.3.11"
+  },
+  "devDependencies": {
+    "@fontsource/open-sans": "^5.0.20",
+    "@schedule-x/prettier-config": "^0.3.0",
+    "@schedule-x/shared": "^1.23.0",
+    "@vitejs/plugin-vue": "^4.5.2",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8",
+    "vue-tsc": "^1.8.25"
+  }
+}
