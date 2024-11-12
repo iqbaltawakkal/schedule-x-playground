@@ -269,6 +269,8 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits(['update', 'create', 'delete'])
+
 /* calendar script */
 const eventsService = createEventsServicePlugin()
 const calendarControls = createCalendarControlsPlugin()
@@ -339,6 +341,7 @@ function confirmDelete(calendarEvent) {
 
 function deleteEvent() {
   eventsService.remove(selectedEvent.value.id)
+  emit('delete', selectedEvent.value)
   isModalConfirm.value = false
   closeModalEvent()
 }
@@ -444,11 +447,12 @@ async function saveEvent() {
   const { valid } = await modalForm.value.validate()
   if (!valid) return
   const data = preProcessBeforeSubmit()
-  console.log(data)
   if (isEdit) {
     eventsService.update(data)
+    emit('update', data)
   } else {
     eventsService.add(data)
+    emit('create', data)
   }
   isModalForm.value = false
 }

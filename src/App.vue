@@ -1,5 +1,10 @@
 <template>
-  <Calendar :eventData="eventData" />
+  <Calendar
+    :eventData="eventData"
+    @create="console.log"
+    @update="console.log"
+    @delete="console.log"
+  />
 </template>
 
 <script setup>
