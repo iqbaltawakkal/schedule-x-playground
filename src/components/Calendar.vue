@@ -73,11 +73,7 @@
     </template>
 
     <template #headerContentLeftPrepend>
-      <button
-        class="event-button sx__ripple"
-        @click="onShowModalForm(null)"
-        :style="`min-width: 180px;`"
-      >
+      <button class="event-button sx__ripple" @click="onShowModalForm(null)">
         Add event
       </button>
     </template>
@@ -100,8 +96,8 @@
       </template>
     </v-card>
   </v-dialog>
-  <v-dialog v-model="isModalForm" width="auto">
-    <v-card width="700px" :title="isEdit ? 'Edit event' : 'Create event'">
+  <v-dialog class="modal-form" v-model="isModalForm">
+    <v-card :title="isEdit ? 'Edit event' : 'Create event'">
       <v-card-text>
         <v-form ref="modalForm" @submit.prevent class="flex flex-col gap-2">
           <v-text-field
@@ -122,40 +118,44 @@
             :rules="[(v) => !!v || 'This field is required']"
             v-model="selectedEvent.description"
           ></v-text-field>
-          <div class="flex items-center gap-2">
-            <v-text-field
-              density="comfortable"
-              type="date"
-              label="Start date"
-              variant="outlined"
-              required
-              v-model="selectedEvent.startDate"
-            ></v-text-field>
-            <v-text-field
-              v-if="!selectedEvent.isFullDay"
-              density="comfortable"
-              type="time"
-              variant="outlined"
-              required
-              v-model="selectedEvent.startTime"
-            ></v-text-field>
-            <div class="mb-5">-</div>
-            <v-text-field
-              density="comfortable"
-              type="date"
-              label="Start date"
-              variant="outlined"
-              required
-              v-model="selectedEvent.endDate"
-            ></v-text-field>
-            <v-text-field
-              v-if="!selectedEvent.isFullDay"
-              density="comfortable"
-              type="time"
-              variant="outlined"
-              required
-              v-model="selectedEvent.endTime"
-            ></v-text-field>
+          <div class="flex items-center gap-2 sm:flex-row flex-col">
+            <div class="flex gap-2 w-100">
+              <v-text-field
+                density="comfortable"
+                type="date"
+                label="Start date"
+                variant="outlined"
+                required
+                v-model="selectedEvent.startDate"
+              ></v-text-field>
+              <v-text-field
+                v-if="!selectedEvent.isFullDay"
+                density="comfortable"
+                type="time"
+                variant="outlined"
+                required
+                v-model="selectedEvent.startTime"
+              ></v-text-field>
+            </div>
+            <div class="mb-5 hidden sm:block">-</div>
+            <div class="flex gap-2 w-100">
+              <v-text-field
+                density="comfortable"
+                type="date"
+                label="End date"
+                variant="outlined"
+                required
+                v-model="selectedEvent.endDate"
+              ></v-text-field>
+              <v-text-field
+                v-if="!selectedEvent.isFullDay"
+                density="comfortable"
+                type="time"
+                variant="outlined"
+                required
+                v-model="selectedEvent.endTime"
+              ></v-text-field>
+            </div>
           </div>
           <v-checkbox
             v-model="selectedEvent.isFullDay"
@@ -227,7 +227,6 @@
           @click="isModalForm = false"
         ></v-btn>
         <v-btn
-          :style="`min-width: 120px;`"
           rounded="xl"
           variant="flat"
           text="Save"
@@ -267,6 +266,10 @@ const props = defineProps({
     type: [Array, String],
     default: () => [],
   },
+  isMondayFirstWeek: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 const emit = defineEmits(['update', 'create', 'delete'])
@@ -279,6 +282,7 @@ const eventModal = createEventModalPlugin()
 const calendarApp = shallowRef(
   createCalendar({
     locale: 'en-US',
+    firstDayOfWeek: props.isMondayFirstWeek ? 1 : 0,
     views: [viewMonthAgenda, viewMonthGrid, viewWeek, viewDay],
     defaultView: viewWeek.name,
     calendars: calendars,
@@ -494,6 +498,30 @@ async function saveEvent() {
   font-weight: 600;
   display: flex;
   justify-content: center;
+  min-width: 120px;
+}
+
+.modal-form {
+  .v-overlay__content {
+    width: 100%;
+  }
+  @media (min-width: 640px) {
+    .v-overlay__content {
+      width: auto !important;
+    }
+  }
+  .v-card {
+    max-width: 700px;
+    @media (min-width: 640px) {
+      width: 700px;
+    }
+  }
+}
+
+.sx__range-heading {
+  @media (max-width: 640px) {
+    display: none;
+  }
 }
 
 ::-webkit-scrollbar {
@@ -524,7 +552,8 @@ async function saveEvent() {
   color: var(--sx-color-primary) !important;
 }
 
-input[type='date'].v-field__input {
+input[type='date'].v-field__input,
+input[type='time'].v-field__input {
   display: block;
   line-height: normal;
 }
