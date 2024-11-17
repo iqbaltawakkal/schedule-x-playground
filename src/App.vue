@@ -1,14 +1,18 @@
 <template>
   <Calendar
+    v-if="activated"
     :eventData="eventData"
     @create="console.log"
     @update="console.log"
     @delete="console.log"
   />
+  <Alert componentName="Synergy calendar" v-else />
 </template>
 
 <script setup>
+import { onMounted, ref, watch } from 'vue'
 import Calendar from './components/Calendar.vue'
+import Alert from './components/Alert.vue'
 const eventData = [
   {
     id: 1,
@@ -45,4 +49,13 @@ const eventData = [
     calendarId: 'personal',
   },
 ]
+const activated = ref(false)
+const licenseKey = ref('key')
+
+watch(licenseKey, () => checkLicense(), { deep: true, immediate: true })
+
+function checkLicense() {
+  if (licenseKey.value) activated.value = true
+  else activated.value = false
+}
 </script>
