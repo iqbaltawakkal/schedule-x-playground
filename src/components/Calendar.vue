@@ -519,8 +519,23 @@ async function saveEvent() {
 }
 
 .sx__range-heading {
-  @media (max-width: 640px) {
+  @media (max-width: 1024px) {
     display: none;
+  }
+}
+
+.sx__view-selection-selected-item,
+.sx__calendar-header .sx__date-input,
+.event-button {
+  @media (max-width: 1024px) {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+}
+
+.sx__calendar {
+  @media (max-width: 1024px) {
+    border: 0px;
   }
 }
 
